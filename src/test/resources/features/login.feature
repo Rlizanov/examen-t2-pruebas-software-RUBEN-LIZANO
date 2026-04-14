@@ -18,3 +18,4 @@ Feature: Login on SauceDemo
     When she logs in with username "locked_out_user" and password "secret_sauce"
     Then she should see the error message "Epic sadface: Sorry, this user has been locked out."
     And she should remain on the login page
+
