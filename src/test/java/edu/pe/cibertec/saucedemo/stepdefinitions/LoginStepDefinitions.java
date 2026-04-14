@@ -64,7 +64,7 @@ public class LoginStepDefinitions {
 
     // NUEVOS PASOS
 
-    // 3. Agrega estos nuevos métodos al final de la clase
+
     @Then("the page load time should be greater than {int} milliseconds")
     public void verifyLoadTime(int expectedTime) {
         long duration = System.currentTimeMillis() - startTime;

@@ -25,8 +25,8 @@ public class CompletarCheckout implements Task {
     @Override
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(
-                Click.on(CarritoPage.CART_LINK), // Ingresamos al carrito
-                Click.on(CheckoutPage.BOTON_CHECKOUT), // Clic en el botón checkout
+                Click.on(CarritoPage.CART_LINK),
+                Click.on(CheckoutPage.BOTON_CHECKOUT),
                 Enter.theValue(firstName).into(CheckoutPage.FIRST_NAME),
                 Enter.theValue(lastName).into(CheckoutPage.LAST_NAME),
                 Enter.theValue(postalCode).into(CheckoutPage.POSTAL_CODE),
