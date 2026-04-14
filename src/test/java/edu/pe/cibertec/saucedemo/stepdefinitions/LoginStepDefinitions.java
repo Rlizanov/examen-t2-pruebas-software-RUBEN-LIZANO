@@ -4,6 +4,7 @@ import edu.pe.cibertec.saucedemo.questions.TheErrorMessage;
 import edu.pe.cibertec.saucedemo.questions.ThePageTitle;
 import edu.pe.cibertec.saucedemo.tasks.LoginAs;
 import edu.pe.cibertec.saucedemo.tasks.OpenTheLoginPage;
+import edu.pe.cibertec.saucedemo.tasks.VerificarSesion;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -16,6 +17,8 @@ import static org.hamcrest.Matchers.*;
 
 public class LoginStepDefinitions {
 
+    private long startTime;
+
     @Given("{word} is on the SauceDemo login page")
     public void openLoginPage(String actorName) {
         Actor actor = OnStage.theActorCalled(actorName);
@@ -25,6 +28,9 @@ public class LoginStepDefinitions {
 
     @When("she logs in with username {string} and password {string}")
     public void loginWith(String username, String password) {
+        if (username.equals("performance_glitch_user")) {
+            startTime = System.currentTimeMillis();
+        }
         OnStage.theActorInTheSpotlight().attemptsTo(
                 LoginAs.user(username).withPassword(password)
         );
@@ -56,4 +62,35 @@ public class LoginStepDefinitions {
 
     }
 
+    // NUEVOS PASOS
+
+    // 3. Agrega estos nuevos métodos al final de la clase
+    @Then("the page load time should be greater than {int} milliseconds")
+    public void verifyLoadTime(int expectedTime) {
+        long duration = System.currentTimeMillis() - startTime;
+        if (duration < expectedTime) {
+            throw new AssertionError("El login fue demasiado rápido: " + duration + "ms");
+        }
+    }
+
+    @When("she navigates to the cart page")
+    public void navigateToCart() {
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                net.serenitybdd.screenplay.playwright.interactions.Click.on(".shopping_cart_link")
+        );
+    }
+
+    @When("she navigates back to the inventory page")
+    public void navigateBack() {
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                net.serenitybdd.screenplay.playwright.interactions.Click.on("#continue-shopping")
+        );
+    }
+
+    @Then("she should still be logged in")
+    public void verifyStillLoggedIn() {
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                VerificarSesion.activa()
+        );
+    }
 }
